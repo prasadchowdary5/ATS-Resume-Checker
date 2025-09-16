@@ -6,34 +6,41 @@ from docx import Document
 import PyPDF2
 import io
 import nltk
+import os
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import tempfile
-import os
 
+# Set NLTK data path for Streamlit Cloud
+nltk_data_path = '/home/adminuser/nltk_data'
+if os.path.exists(nltk_data_path):
+    nltk.data.path.append(nltk_data_path)
 
 # Download required NLTK data with error handling
 def download_nltk_data():
     try:
         nltk.data.find('tokenizers/punkt')
     except LookupError:
-        nltk.download('punkt')
-
+        nltk.download('punkt', download_dir=nltk_data_path)
+        nltk.data.path.append(nltk_data_path)
+    
     try:
-        nltk.data.find('tokenizers/punkt_tab/english')
+        nltk.data.find('tokenizers/punkt_tab')
     except LookupError:
-        nltk.download('punkt_tab')
-
+        nltk.download('punkt_tab', download_dir=nltk_data_path)
+        nltk.data.path.append(nltk_data_path)
+    
     try:
         nltk.data.find('corpora/stopwords')
     except LookupError:
-        nltk.download('stopwords')
-
+        nltk.download('stopwords', download_dir=nltk_data_path)
+        nltk.data.path.append(nltk_data_path)
 
 # Download NLTK data
 download_nltk_data()
+
+# [Rest of your code remains the same...]
 
 # Page configuration
 st.set_page_config(
@@ -341,4 +348,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
